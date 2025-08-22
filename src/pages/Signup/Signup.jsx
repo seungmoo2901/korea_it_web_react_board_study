@@ -2,16 +2,16 @@
 import { useEffect, useState } from "react";
 import AuthInput from "../../components/AuthInput/AuthInput";
 import * as s from "./styles";
+import { signupRequest } from "../../apis/auth/authApis";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [errorMessage, setErrorMessage] = useState({
-    password: "",
-    email: "",
-  });
+  const [errorMessage, setErrorMessage] = useState({});
+  const navigate = useNavigate();
 
   const signupOnClickHandler = () => {
     if (
@@ -25,6 +25,25 @@ function Signup() {
     }
 
     // 회원가입 요청 API
+    signupRequest({
+      username: username,
+      password: password,
+      email: email,
+    })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status === "success") {
+          alert(response.data.message);
+          navigate("/auth/signin");
+        } else if (response.data.status === "failed") {
+          alert(response.data.message);
+          return;
+        }
+      })
+      .catch((error) => {
+        alert("문제가 발생했습니다. 다시 시도해 주세요.");
+        return;
+      });
   };
 
   useEffect(() => {

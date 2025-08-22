@@ -6,6 +6,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AuthInput from "../../components/AuthInput/AuthInput";
+import { signinRequest } from "../../apis/auth/authApis";
 
 function Signin() {
   const [username, setUsername] = useState("");
@@ -22,10 +23,23 @@ function Signin() {
       alert("아이디 또는 비밀번호를 입력해주세요.");
       return;
     } else {
-      // 로그인 API요청 보내기
+      // 로그인 API 요청
+      signinRequest({
+        username: username,
+        password: password,
+      }).then((response) => {
+        console.log(response.data);
+        if (response.data.status === "success") {
+          alert(response.data.message);
+          localStorage.setItem("accessToken", response.data.data);
+          navigate("/");
+        } else if (response.data.status === "failed") {
+          alert(response.data.message);
+          return;
+        }
+      });
     }
   };
-
   return (
     <div css={s.container}>
       <h1>로그인</h1>
