@@ -59,13 +59,14 @@ export const oauthBtnBox = css`
   flex-direction: column;
   gap: 10px;
 
-  & > button {
+  & > a {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px; /* 아이콘-텍스트 간격 */
     width: 100%;
     padding: 12px;
+    box-sizing: border-box;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     background-color: #fff;

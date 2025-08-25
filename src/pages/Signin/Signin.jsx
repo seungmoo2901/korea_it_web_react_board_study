@@ -23,16 +23,15 @@ function Signin() {
       alert("아이디 또는 비밀번호를 입력해주세요.");
       return;
     } else {
-      // 로그인 API 요청
+      // 로그인 API요청 보내기
       signinRequest({
         username: username,
         password: password,
       }).then((response) => {
-        console.log(response.data);
         if (response.data.status === "success") {
           alert(response.data.message);
           localStorage.setItem("accessToken", response.data.data);
-          navigate("/");
+          window.location.href = "/";
         } else if (response.data.status === "failed") {
           alert(response.data.message);
           return;
@@ -40,6 +39,7 @@ function Signin() {
       });
     }
   };
+
   return (
     <div css={s.container}>
       <h1>로그인</h1>
@@ -73,18 +73,18 @@ function Signin() {
           </button>
         </div>
         <div css={s.oauthBtnBox}>
-          <button className="google">
+          <a href="http://localhost:8080/oauth2/authorization/google">
             <FcGoogle size={20} />
             <span>구글로 로그인</span>
-          </button>
-          <button className="naver">
+          </a>
+          <a>
             <SiNaver size={18} color="#03C75A" />
             <span>네이버로 로그인</span>
-          </button>
-          <button className="kakao">
+          </a>
+          <a>
             <RiKakaoTalkFill size={20} color="#FEE500" />
             <span>카카오로 로그인</span>
-          </button>
+          </a>
         </div>
       </div>
     </div>
