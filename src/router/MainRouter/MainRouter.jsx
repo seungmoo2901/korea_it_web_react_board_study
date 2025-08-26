@@ -29,5 +29,5 @@ function MainRouter() {
   );
 }
 
-export default MainRouter; // 다른 곳에서 MainRouter를 불러다 쓸 수 있도록 export
+export default MainRouter; 
 
