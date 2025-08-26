@@ -16,21 +16,28 @@
 
 import axios from "axios";
 
+// 특정 postId에 해당하는 게시물을 가져오는 함수
 export const fetchPost = async (postId) => {
   try {
+    // axios.get을 사용해 JSONPlaceholder의 posts API에서 특정 게시물 요청
     const response = await axios.get(
       `https://jsonplaceholder.typicode.com/posts/${postId}`
     );
-    console.log(response.data); //게시물 데이터가 들어있다
+
+    // 응답 데이터 출력 (게시물의 내용이 들어있음)
+    console.log(response.data);
   } catch (error) {
+    // 요청 중 에러 발생 시 에러 출력
     console.log(error);
   }
 };
 
+// JSONPlaceholder API를 기본 주소로 하는 axios 인스턴스 생성
 export const jsonInstance = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
 });
 
+// 로컬 서버(백엔드) API를 기본 주소로 하는 axios 인스턴스 생성
 export const instance = axios.create({
   baseURL: "http://localhost:8080",
 });
