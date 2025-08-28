@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import * as s from "./styles";
 import { getBoardList } from "../../apis/board/boardApi";
 import ReactPaginate from "react-paginate";
+import { useNavigate } from "react-router-dom";
 
 function Board() {
   // 게시글 목록을 저장할 상태 변수 (초기값은 빈 배열)
@@ -10,8 +11,10 @@ function Board() {
   const [message, setMessage] = useState("");
   const [curruntBoardList, setCurruntBoardList] = useState([]);
   const [curruntPage, setCurruntPage] = useState(0);
-
+  const navigate = useNavigate();
   const amountBoard = 15; //한 페이지에 보여줄 게시물 갯수
+
+
 
   useEffect(() => {
     // 컴포넌트가 처음 렌더링될 때 실행되는 부분
@@ -47,7 +50,12 @@ function Board() {
               const formattedDate = date.split("T")[0];
               const boardNumber = curruntPage * amountBoard + index + 1;
               return (
-                <li key={board.boardId}>
+                <li
+                  key={board.boardId}
+                  onClick={() => {
+                    navigate(`/board/${board.boardId}`);
+                  }}
+                >
                   <div>
                     <span>{boardNumber}</span>
                     <strong>{board.title}</strong>
