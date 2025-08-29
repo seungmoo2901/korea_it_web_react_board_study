@@ -7,6 +7,8 @@ import Board from "../../pages/Board/Board";
 import AuthRouter from "../AuthRouter/AuthRouter";
 import ProtectedRoute from "../../components/ProtectedRoute/ProtectedRoute";
 import BoardDetail from "../../pages/BoardDetail/BoardDetail";
+import Update from "../../pages/Update/Update";
+import AcountRouter from "../AcountRouter/AcountRouter";
 
 function MainRouter() {
   return (
@@ -38,7 +40,24 @@ function MainRouter() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/board/update/:boardId"
+          element={
+            <ProtectedRoute>
+              <Update />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/auth/*" element={<AuthRouter />} />
+        <Route
+          path="/account/*"
+          element={
+            <ProtectedRoute>
+              <AcountRouter />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

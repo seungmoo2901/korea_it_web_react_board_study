@@ -2,12 +2,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as s from "./styles";
 import { useEffect, useState } from "react";
-import {
-  DeleteBoard,
-  getBoardDetail,
-  removeBoard,
-} from "../../apis/board/boardApi";
 import { useQueryClient } from "@tanstack/react-query";
+import { getBoardDetail, removeBoard } from "../../apis/board/boardApi";
 
 function BoardDetail() {
   const [boardData, setBoardData] = useState({});
@@ -16,8 +12,7 @@ function BoardDetail() {
   const queryClient = useQueryClient();
   const principalData = queryClient.getQueryData(["getPrincipal"]);
 
-  //삭제버튼 누르면 삭제요청 보내고 성공시 리스트로 보내기
-  const removeOnClickHandler = async () => {
+  const removeOnClickHandler = (boardId) => {
     removeBoard(boardId).then((response) => {
       if (response.data.status === "success") {
         alert(response.data.message);
@@ -53,7 +48,7 @@ function BoardDetail() {
         <button
           css={s.btn("#6c757d")}
           onClick={() => {
-            navigate("/board");
+            navigate(-1);
           }}
         >
           목록
@@ -62,13 +57,16 @@ function BoardDetail() {
           <div>
             <button
               css={s.btn("#dc3545")}
-              onClick={() => {
-                removeOnClickHandler(boardId);
-              }}
+              onClick={() => removeOnClickHandler(boardData.boardId)}
             >
               삭제
             </button>
-            <button css={s.btn("#0d6efd")}>수정</button>
+            <button
+              css={s.btn("#0d6efd")}
+              onClick={() => navigate(`/board/update/${boardId}`)}
+            >
+              수정
+            </button>
           </div>
         ) : (
           <></>

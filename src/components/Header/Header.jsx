@@ -40,7 +40,14 @@ function Header() {
       <div>
         {principalData ? (
           <ul>
-            <li css={s.headerIcon}>
+            <li
+              css={s.headerIcon}
+              onClick={() =>
+                onClickNavHandler(
+                  `/account/profile/${principalData.data.data.username}`
+                )
+              }
+            >
               <IoMdPerson />
             </li>
             <li css={s.headerIcon} onClick={onClickLogout}>
