@@ -1,7 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import * as s from "./styles";
 import profileImg from "../../assets/꼬부기.jpeg";
+import MyBoard from "../../components/MyBoard/MyBoard";
+import ChangePassword from "../../components/ChangePassword/ChangePassword";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { usePrincipalState } from "../../store/usePrincipalStore";
+
 function Profile() {
+  const [tab, setTab] = useState("myboard");
+  const [tabChild, setTabChild] = useState(1);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
+  const { isLoggedIn, principal } = usePrincipalState();
+
+  const tabClickHandler = (path) => {
+    setTabChild(path === "myboard" ? 1 : 2);
+    navigate(`${pathname}?tab=${path}`);
+  };
+
+  useEffect(() => {
+    setTab(searchParams.get("tab"));
+  }, [pathname, searchParams]);
+
   return (
     <div css={s.container}>
       <div css={s.profileContainer}>
@@ -12,14 +34,34 @@ function Profile() {
             </div>
           </div>
           <div css={s.profileInfoBox}>
-            <h3>username</h3>
+            <h3>{principal?.username}</h3>
             <div>
-              <p>email@naver.com</p>
-              <button>인증하기</button>
+              <p>{principal?.email}</p>
+              {principal?.authorities[0].authority === "ROLE_TEMPORARY" ? (
+                <button>인증하기</button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </div>
-        <div css={s.profileMain}></div>
+        <div css={s.profileBox}>
+          <div css={s.profileTab(tabChild)}>
+            <ul>
+              <li onClick={() => tabClickHandler("myboard")}>내 게시물</li>
+              <li onClick={() => tabClickHandler("changepassword")}>
+                비밀번호 변경
+              </li>
+            </ul>
+          </div>
+          <div css={s.profileMain}>
+            {tab === "myboard" || tab === null ? (
+              <MyBoard />
+            ) : (
+              <ChangePassword />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

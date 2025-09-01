@@ -9,8 +9,7 @@ function Update() {
   const [boardData, setBoardData] = useState({ title: "", content: "" });
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const principalData = queryClient.getQueryData(["getPrincipal"]);
+  const { isLoggedIn, principal } = usePrincipalState();
 
   const updateBoardMutation = useMutation({
     mutationKey: "updateBoard",
@@ -49,7 +48,7 @@ function Update() {
   useEffect(() => {
     getBoardDetail(boardId).then((response) => {
       if (response.data.status === "success") {
-        if (principalData.data.data.userId !== response.data.data.userId) {
+        if (principal.userId !== response.data.data.userId) {
           alert("잘못된 접근입니다.");
           navigate("/board");
         }
@@ -59,7 +58,7 @@ function Update() {
         navigate("/board");
       }
     });
-  }, [boardId, principalData, navigate]);
+  }, [boardId, principal, navigate]);
 
   return (
     <div css={s.container}>

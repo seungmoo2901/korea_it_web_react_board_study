@@ -2,15 +2,15 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as s from "./styles";
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+
 import { getBoardDetail, removeBoard } from "../../apis/board/boardApi";
+import { usePrincipalState } from "../../store/usePrincipalStore";
 
 function BoardDetail() {
   const [boardData, setBoardData] = useState({});
   const { boardId } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const principalData = queryClient.getQueryData(["getPrincipal"]);
+  const { isLoggedIn, principal } = usePrincipalState();
 
   const removeOnClickHandler = (boardId) => {
     removeBoard(boardId).then((response) => {
@@ -53,7 +53,7 @@ function BoardDetail() {
         >
           목록
         </button>
-        {principalData.data.data.userId === boardData.userId ? (
+        {principal.userId === boardData.userId ? (
           <div>
             <button
               css={s.btn("#dc3545")}
