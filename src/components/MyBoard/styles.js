@@ -16,6 +16,11 @@ export const container = css`
     box-sizing: border-box;
     color: #333;
     font-size: 14px;
+    cursor: pointer;
+
+    &:hover{
+      background-color: #f2f2f2;
+    }
 
     & > div {
       display: flex;

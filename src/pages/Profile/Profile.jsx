@@ -6,6 +6,7 @@ import ChangePassword from "../../components/ChangePassword/ChangePassword";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { usePrincipalState } from "../../store/usePrincipalStore";
+import { sendmailRequest } from "../../apis/account/accountApis";
 
 function Profile() {
   const [tab, setTab] = useState("myboard");
@@ -20,8 +21,25 @@ function Profile() {
     navigate(`${pathname}?tab=${path}`);
   };
 
+  const onClickVerifyHandler = () => {
+    sendmailRequest({
+      email: principal.email,
+    }).then((response) => {
+      if (response.data.status === "success") {
+        alert(response.data.message);
+      } else if (response.data.status === "failed") {
+        alert(response.data.message);
+      }
+    });
+  };
+
   useEffect(() => {
     setTab(searchParams.get("tab"));
+    setTabChild(
+      searchParams.get("tab") === "myboard" || searchParams.get("tab") === null
+        ? 1
+        : 2
+    );
   }, [pathname, searchParams]);
 
   return (
@@ -38,7 +56,7 @@ function Profile() {
             <div>
               <p>{principal?.email}</p>
               {principal?.authorities[0].authority === "ROLE_TEMPORARY" ? (
-                <button>인증하기</button>
+                <button onClick={onClickVerifyHandler}>인증하기</button>
               ) : (
                 <></>
               )}
@@ -56,7 +74,7 @@ function Profile() {
           </div>
           <div css={s.profileMain}>
             {tab === "myboard" || tab === null ? (
-              <MyBoard />
+              <MyBoard userId={principal?.userId} />
             ) : (
               <ChangePassword />
             )}
