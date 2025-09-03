@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { usePrincipalState } from "../../store/usePrincipalStore";
 import { sendmailRequest } from "../../apis/account/accountApis";
+import ChangeProfileImg from "../../components/ChangeProfileImg/ChangeProfileImg";
 
 function Profile() {
   const [tab, setTab] = useState("myboard");
@@ -17,7 +18,7 @@ function Profile() {
   const { isLoggedIn, principal } = usePrincipalState();
 
   const tabClickHandler = (path) => {
-    setTabChild(path === "myboard" ? 1 : 2);
+    setTabChild(path === "myboard" ? 1 : path === "changepassword" ? 2 : 3);
     navigate(`${pathname}?tab=${path}`);
   };
 
@@ -38,7 +39,9 @@ function Profile() {
     setTabChild(
       searchParams.get("tab") === "myboard" || searchParams.get("tab") === null
         ? 1
-        : 2
+        : searchParams.get("tab") === "changepassword"
+        ? 2
+        : 3
     );
   }, [pathname, searchParams]);
 
@@ -48,7 +51,7 @@ function Profile() {
         <div css={s.profileHeader}>
           <div css={s.profileImgBox}>
             <div>
-              <img src={profileImg} alt="profileImage" />
+              <img src={principal?.profileImg} alt="profileImage" />
             </div>
           </div>
           <div css={s.profileInfoBox}>
@@ -70,13 +73,18 @@ function Profile() {
               <li onClick={() => tabClickHandler("changepassword")}>
                 비밀번호 변경
               </li>
+              <li onClick={() => tabClickHandler("changeprofileimg")}>
+                프로필 이미지 변경
+              </li>
             </ul>
           </div>
           <div css={s.profileMain}>
             {tab === "myboard" || tab === null ? (
               <MyBoard userId={principal?.userId} />
-            ) : (
+            ) : tab === "changepassword" ? (
               <ChangePassword />
+            ) : (
+              <ChangeProfileImg oldprofileImg={principal.profileImg} />
             )}
           </div>
         </div>
