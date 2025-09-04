@@ -6,15 +6,22 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { oauth2SignupRequest } from "../../apis/auth/authApis";
 
 function OAuth2Signup() {
+  // 입력 상태 관리
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState({});
+
+  // URL 쿼리 파라미터(provider, providerUserId, email 등)
   const [searchParam] = useSearchParams();
+
+  // 페이지 이동을 위한 hook
   const navigate = useNavigate();
 
+  // 회원가입 버튼 클릭 시 실행되는 함수
   const signupOnClickHandler = () => {
+    // 필수 입력값 검증
     if (
       username.trim().length === 0 ||
       password.trim().length === 0 ||
@@ -25,35 +32,39 @@ function OAuth2Signup() {
       return;
     }
 
+    // 비밀번호 확인 검증
     if (password !== confirmPassword) {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
 
-    
+    // OAuth2 회원가입 API 요청
     oauth2SignupRequest({
       username: username,
       password: password,
       email: email,
-      provider: searchParam.get("provider"),
-      providerUserId: searchParam.get("providerUserId"),
+      provider: searchParam.get("provider"), // 소셜 로그인 제공자
+      providerUserId: searchParam.get("providerUserId"), // 소셜 계정 사용자 ID
     })
       .then((response) => {
-        console.log(response.data);
         if (response.data.status === "success") {
+          // 가입 성공 → 로그인 페이지로 이동
           alert(response.data.message);
           navigate("/auth/signin");
         } else if (response.data.status === "failed") {
+          // 가입 실패 → 메시지 출력
           alert(response.data.message);
           return;
         }
       })
       .catch((error) => {
+        // 요청 실패 시
         alert("문제가 발생했습니다. 다시 시도해주세요.");
         return;
       });
   };
 
+  // 비밀번호 입력 시 유효성 검사
   useEffect(() => {
     const newErrorMessage = {};
     if (password.length > 0) {
@@ -65,9 +76,10 @@ function OAuth2Signup() {
       }
     }
 
-    setErrorMessage(newErrorMessage);
+    setErrorMessage(newErrorMessage); // 유효성 검사 결과 저장
   }, [password]);
 
+  // URL 쿼리에서 이메일 값을 가져와 상태에 저장
   useEffect(() => {
     setEmail(searchParam.get("email"));
   }, [searchParam]);

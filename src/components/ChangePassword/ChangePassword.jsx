@@ -8,13 +8,17 @@ import { useNavigate } from "react-router-dom";
 import { usePrincipalState } from "../../store/usePrincipalStore";
 
 function ChangePassword() {
+  // 기존 비밀번호, 새 비밀번호, 새 비밀번호 확인 상태
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // 로그인 상태와 사용자 정보, 로그아웃 함수 가져오기
   const { isLoggedIn, principal, logout } = usePrincipalState();
   const navigate = useNavigate();
 
+  // 비밀번호 변경 API 요청
   const changePasswordMutation = useMutation({
     mutationKey: "changePassword",
     mutationFn: changePasswordRequest,
@@ -33,6 +37,7 @@ function ChangePassword() {
     },
   });
 
+  // 비밀번호 변경 버튼 클릭
   const onClickChangeHandler = () => {
     if (
       password.trim().length === 0 ||
@@ -52,6 +57,7 @@ function ChangePassword() {
       alert("비밀번호가 일치하지 않습니다.");
       return;
     }
+    // API 호출
     changePasswordMutation.mutate({
       userId: principal.userId,
       oldPassword: password,
@@ -59,6 +65,7 @@ function ChangePassword() {
     });
   };
 
+  // 새 비밀번호 입력 시 유효성 검사
   useEffect(() => {
     setErrorMessage("");
     if (newPassword.length > 0) {

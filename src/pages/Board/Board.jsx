@@ -6,16 +6,22 @@ import ReactPaginate from "react-paginate";
 import { useNavigate } from "react-router-dom";
 
 function Board() {
-  // 게시글 목록을 저장할 상태 변수 (초기값은 빈 배열)
+  // 게시글 전체 목록을 저장하는 상태
   const [boardList, setBoardList] = useState([]);
+  // 게시글이 없을 때 보여줄 메시지
   const [message, setMessage] = useState("");
+  // 현재 페이지에 표시될 게시글 목록
   const [curruntBoardList, setCurruntBoardList] = useState([]);
+  // 현재 선택된 페이지 번호
   const [curruntPage, setCurruntPage] = useState(0);
+
+  // 페이지 이동을 위한 React Router 훅
   const navigate = useNavigate();
-  const amountBoard = 15; //한 페이지에 보여줄 게시물 갯수
 
+  // 한 페이지에 보여줄 게시글 개수
+  const amountBoard = 15;
 
-
+  // 컴포넌트 처음 렌더링 시 서버에서 게시글 목록 가져오기
   useEffect(() => {
     // 컴포넌트가 처음 렌더링될 때 실행되는 부분
     getBoardList().then((response) => {
@@ -28,12 +34,14 @@ function Board() {
     });
   }, []);
 
+  // 현재 페이지에 맞는 게시글 잘라서(curruntPage 기준) curruntBoardList에 저장
   useEffect(() => {
     const offset = curruntPage * amountBoard;
     const sliceBoard = boardList.slice(offset, offset + amountBoard);
     setCurruntBoardList(sliceBoard);
   }, [curruntPage, boardList]);
 
+  // 페이지네이션 클릭 시 현재 페이지 변경
   const pageOnchangeHandler = (event) => {
     setCurruntPage(event.selected);
   };

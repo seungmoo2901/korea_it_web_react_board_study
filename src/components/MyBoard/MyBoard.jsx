@@ -5,13 +5,17 @@ import { getBoardList } from "../../apis/board/boardApi";
 import { useNavigate } from "react-router-dom";
 
 function MyBoard({ userId }) {
+  // 사용자 게시물 목록 상태
   const [boardList, setBoardList] = useState([]);
+  // 에러 또는 안내 메시지 상태
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
+  // 컴포넌트 로드 시 게시물 불러오기
   useEffect(() => {
     getBoardList().then((response) => {
       if (response.data.status === "success") {
+        // 로그인한 사용자(userId)의 게시물만 필터링
         setBoardList(
           response.data.data.filter((board) => board.userId === userId)
         );
@@ -21,6 +25,7 @@ function MyBoard({ userId }) {
       }
     });
   }, [userId]);
+  
   return (
     <div css={s.container}>
       <ul>

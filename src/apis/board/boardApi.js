@@ -38,6 +38,7 @@ export const getBoardList = async () => {
   }
 };
 
+// 특정 게시글 상세 조회
 export const getBoardDetail = async (boardId) => {
   try {
     const response = await instance.get(`/board/${boardId}`);
@@ -47,6 +48,7 @@ export const getBoardDetail = async (boardId) => {
   }
 };
 
+// 특정 게시글 삭제
 export const removeBoard = async (boardId) => {
   try {
     const response = await instance.post(`/board/remove/${boardId}`);
@@ -56,6 +58,7 @@ export const removeBoard = async (boardId) => {
   }
 };
 
+// 게시글 수정
 export const updateBoardRequest = async (data) => {
   try {
     const response = await instance.post("/board/update", data);

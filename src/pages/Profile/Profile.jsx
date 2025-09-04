@@ -10,18 +10,24 @@ import { sendmailRequest } from "../../apis/account/accountApis";
 import ChangeProfileImg from "../../components/ChangeProfileImg/ChangeProfileImg";
 
 function Profile() {
+  // 현재 선택된 탭 상태 (내 게시물 / 비밀번호 변경 / 프로필 이미지 변경)
   const [tab, setTab] = useState("myboard");
   const [tabChild, setTabChild] = useState(1);
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [searchParams] = useSearchParams();
+
+  // 로그인 정보 (로그인 여부, 사용자 정보)
   const { isLoggedIn, principal } = usePrincipalState();
 
+  // 탭 클릭 시 탭 상태와 URL 쿼리스트링 변경
   const tabClickHandler = (path) => {
     setTabChild(path === "myboard" ? 1 : path === "changepassword" ? 2 : 3);
     navigate(`${pathname}?tab=${path}`);
   };
 
+  // 이메일 인증 요청
   const onClickVerifyHandler = () => {
     sendmailRequest({
       email: principal.email,
@@ -34,6 +40,7 @@ function Profile() {
     });
   };
 
+  // URL 쿼리스트링(tab 값)에 따라 현재 탭 상태 세팅
   useEffect(() => {
     setTab(searchParams.get("tab"));
     setTabChild(
@@ -84,7 +91,10 @@ function Profile() {
             ) : tab === "changepassword" ? (
               <ChangePassword />
             ) : (
-              <ChangeProfileImg oldprofileImg={principal.profileImg} />
+              <ChangeProfileImg
+                oldprofileImg={principal.profileImg}
+                userId={principal?.userId}
+              />
             )}
           </div>
         </div>

@@ -3,7 +3,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import * as s from "./styles";
 
 function OAuth2() {
+  // 페이지 이동을 위한 React Router Hook
   const navigate = useNavigate();
+
+  // 현재 URL의 쿼리 파라미터(provider, providerUserId, email 등)를 가져오기
   const [searchParam] = useSearchParams();
   return (
     <div css={s.container}>

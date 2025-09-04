@@ -29,9 +29,8 @@ export const signupRequest = async (data) => {
   try {
     // "/auth/signup" 엔드포인트로 POST 요청 (data: 회원가입 정보)
     const response = await instance.post("/auth/signup", data);
-    return response; // 성공 시 응답 반환
+    return response;
   } catch (error) {
-    // 실패 시 error.response 반환
     return error.response;
   }
 };
@@ -41,27 +40,28 @@ export const signinRequest = async (data) => {
   try {
     // "/auth/signin" 엔드포인트로 POST 요청 (data: 로그인 정보)
     const response = await instance.post("/auth/signin", data);
-    return response; // 성공 시 응답 반환
+    return response;
   } catch (error) {
-    // 실패 시 error.response 반환
     return error.response;
   }
 };
 
+// OAuth2 소셜 회원가입 요청
 export const oauth2SignupRequest = async (data) => {
-	try {
-		const response = await instance.post("/oauth2/signup", data);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
+  try {
+    const response = await instance.post("/oauth2/signup", data);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
 };
 
-export const oauth2MergeRequest = async (data)=>{
+// OAuth2 계정 연동(merge) 요청
+export const oauth2MergeRequest = async (data) => {
   try {
-		const response = await instance.post("/oauth2/merge", data);
-		return response;
-	} catch (error) {
-		return error.response;
-	}
-}
+    const response = await instance.post("/oauth2/merge", data);
+    return response;
+  } catch (error) {
+    return error.response;
+  }
+};
